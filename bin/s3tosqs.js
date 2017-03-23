@@ -3,18 +3,11 @@ const lambda = require('../index');
 const commandLineArgs = require('command-line-args');
 const url = require('url');
 const options = commandLineArgs([
-    { name: 'queue', alias: 'q', type: String, defaultOption: true },
-    { name: 'tasks', alias: 't', type: String }
+    { name: 'tasks', alias: 't', type: String, defaultOption: true }
 ]);
 
 function usage() {
-    console.info("Usage: s3tosqs -q url -t s3path")
-}
-
-if (! ('queue' in options)) {
-    usage();
-    console.error("Missing Argument: queue");
-    process.exit(2);
+    console.info("Usage: s3tosqs -t s3path")
 }
 
 if (! ('tasks' in options)) {
@@ -23,7 +16,6 @@ if (! ('tasks' in options)) {
     process.exit(2);
 }
 
-process.env.QUEUE = options.queue
 s3path = url.parse(options.tasks);
 
 var createdEvent = {

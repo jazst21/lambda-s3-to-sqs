@@ -12,6 +12,7 @@ if(!process.env.CONCURRENCY) process.env.CONCURRENCY = 10;
 const S3 = new AWS.S3();
 const SQS = new AWS.SQS({region:process.env.REGION, apiVersion: '2012-11-05'});
 try {
+    require('node-env-file')('.env');
     if(process.env.LOG_LEVEL) winston.level = process.env.LOG_LEVEL;
 } catch(err) {
     if(err instanceof TypeError && err.message.substring(0,30) == "Environment file doesn't exist") winston.warn('ERROR: Could not find .env file.');
