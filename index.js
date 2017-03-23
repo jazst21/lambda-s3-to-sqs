@@ -6,11 +6,18 @@ const async = require('async');
 const md5 = require('md5-jkmyers');
 const S3 = new AWS.S3();
 const SQS = new AWS.SQS({region:process.env.region, apiVersion: '2012-11-05'});
+const winston = require('winston');
 
 // Configuration
 process.env.region = 'us-east-1';
 process.env.concurrency = 10;
 process.env.queue = 'https://sqs.us-east-1.amazonaws.com/674223647607/ktpi'
+try {
+    if(process.env.LOG_LEVEL) winston.level = process.env.LOG_LEVEL;
+} catch(err) {
+    if(err instanceof TypeError && err.message.substring(0,30) == "Environment file doesn't exist") winston.warn('ERROR: Could not find .env file.');
+    else throw err;
+}
 
 // Globals
 var params = {Bucket: 'tesera.ktpi', Key: 'h1638/input/gridcellsSqs.txt'};
@@ -34,10 +41,10 @@ exports.handler = function(event, context, cb) {
     return exports.getS3().getObject(params).createReadStream()
         .on('end', function() {
             exports.pushToQueue(blockOfLines);
-            console.log("Sending "+linesRead+" tasks to SQS.");
+            winston.info("Sending "+linesRead+" tasks to SQS.");
         })
         .on('error', function(err) {
-            console.log("ERROR" + err)
+            winston.error("ERROR" + err)
             cb(err);
         })
         .pipe(es.split())
@@ -49,7 +56,6 @@ exports.handler = function(event, context, cb) {
 };
 
 exports.pushToQueue = function(block) {
-    console.log('acutal queue');
     exports.blockQueue.push(exports.sqsParamsTemplate(block, process.env.queue));
     block.length = 0;
 }
@@ -57,8 +63,8 @@ exports.pushToQueue = function(block) {
 exports.processBlockFromQueue = function(block, cb) {
     exports.getSQS().sendMessageBatch(block, function(err, data) {
         if(err) {
-            console.log("Message: ", block);
-            console.log("Error: ", err, err.stack);
+            winston.error("Error: ", err, err.stack);
+            winston.error("Error occurred on block: ", block);
         }
         cb();
     });
