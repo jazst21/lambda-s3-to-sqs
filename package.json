@@ -20,9 +20,12 @@
   },
   "homepage": "https://github.com/tesera/s3-to-sqs#readme",
   "dependencies": {
+    "async": "^2.1.5",
     "event-stream": "^3.3.4",
     "lodash": "^4.17.4",
-    "node-env-file": "^0.1.8"
+    "md5-jkmyers": "0.0.1",
+    "node-env-file": "^0.1.8",
+    "winston": "^2.3.1"
   },
   "devDependencies": {
     "command-line-args": "^4.0.2",
