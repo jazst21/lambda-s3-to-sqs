@@ -1,6 +1,6 @@
 [![codeship][2]][1]
 
-# s3-to-sqs-awslambda
+# lambda-s3-to-sqs
 
 The purpose of this project is to maintain a simple lambda service which will load SQS messages from a text file uploaded to s3.
 
