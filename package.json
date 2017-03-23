@@ -1,0 +1,29 @@
+{
+  "name": "s3-to-sqs-awslambda",
+  "version": "0.0.0",
+  "description": "Populate an AWS SQS queue when a task list is uploaded to S3",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha --recursive -i --fgrep '#WIP'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tesera/s3-to-sqs.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tesera/s3-to-sqs/issues"
+  },
+  "homepage": "https://github.com/tesera/s3-to-sqs#readme",
+  "dependencies": {
+    "event-stream": "^3.3.4",
+    "lodash": "^4.17.4"
+  },
+  "devDependencies": {
+    "mocha": "^3.2.0"
+  }
+}
