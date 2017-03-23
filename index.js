@@ -4,14 +4,13 @@ const AWS = require('aws-sdk');
 const es = require('event-stream');
 const async = require('async');
 const md5 = require('md5-jkmyers');
-const S3 = new AWS.S3();
-const SQS = new AWS.SQS({region:process.env.region, apiVersion: '2012-11-05'});
 const winston = require('winston');
 
 // Configuration
-process.env.region = 'us-east-1';
-process.env.concurrency = 10;
-process.env.queue = 'https://sqs.us-east-1.amazonaws.com/674223647607/ktpi'
+if(!process.env.REGION) process.env.REGION = 'us-east-1';
+if(!process.env.CONCURRENCY) process.env.CONCURRENCY = 10;
+const S3 = new AWS.S3();
+const SQS = new AWS.SQS({region:process.env.REGION, apiVersion: '2012-11-05'});
 try {
     if(process.env.LOG_LEVEL) winston.level = process.env.LOG_LEVEL;
 } catch(err) {
@@ -24,18 +23,10 @@ var params = {Bucket: 'tesera.ktpi', Key: 'h1638/input/gridcellsSqs.txt'};
 var blockOfLines = [];
 var linesRead = 0;
 
-exports.blockQueue = async.queue(exports.processBlockFromQueue, process.env.concurrency);
-
-exports.getS3 = function() {
-    return S3;
-};
-
-exports.getSQS = function() {
-    return SQS;
-}
 
 exports.handler = function(event, context, cb) {
 
+    exports.blockQueue = async.queue(exports.processBlockFromQueue, process.env.CONCURRENCY);
     exports.blockQueue.drain = cb;
 
     return exports.getS3().getObject(params).createReadStream()
@@ -55,8 +46,16 @@ exports.handler = function(event, context, cb) {
         }));
 };
 
+exports.getS3 = function() {
+    return S3;
+};
+
+exports.getSQS = function() {
+    return SQS;
+}
+
 exports.pushToQueue = function(block) {
-    exports.blockQueue.push(exports.sqsParamsTemplate(block, process.env.queue));
+    exports.blockQueue.push(exports.sqsParamsTemplate(block, process.env.QUEUE));
     block.length = 0;
 }
 
