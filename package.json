@@ -21,6 +21,7 @@
   "homepage": "https://github.com/tesera/s3-to-sqs#readme",
   "dependencies": {
     "async": "^2.1.5",
+    "aws-sdk": "^2.31.0",
     "event-stream": "^3.3.4",
     "lodash": "^4.17.4",
     "md5-jkmyers": "0.0.1",
