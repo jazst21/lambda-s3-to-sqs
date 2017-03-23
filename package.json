@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/tesera/s3-to-sqs#readme",
   "dependencies": {
+    "command-line-args": "^4.0.2",
     "event-stream": "^3.3.4",
     "lodash": "^4.17.4"
   },
