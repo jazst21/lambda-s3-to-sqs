@@ -20,12 +20,16 @@ try {
 }
 
 // Globals
-var params = {Bucket: 'tesera.ktpi', Key: 'h1638/input/gridcellsSqs.txt'};
 var blockOfLines = [];
 var linesRead = 0;
 
 
 exports.handler = function(event, context, cb) {
+
+    var params = {
+        Bucket: event.Records[0].s3.bucket.name,
+        Key: event.Records[0].s3.object.key
+    };
 
     exports.blockQueue = async.queue(exports.processBlockFromQueue, process.env.CONCURRENCY);
     exports.blockQueue.drain = cb;
