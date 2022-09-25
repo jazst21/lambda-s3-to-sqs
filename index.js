@@ -63,7 +63,9 @@ exports.getSQS = function() {
 }
 
 exports.pushToQueue = function(block) {
-    exports.blockQueue.push(exports.sqsParamsTemplate(block, process.env.QUEUE));
+    // exports.blockQueue.push(exports.sqsParamsTemplate(block, process.env.QUEUE));
+    exports.blockQueue.push(exports.sqsParamsTemplate(block, process.env.QUEUE1));
+    exports.blockQueue.push(exports.sqsParamsTemplate(block, process.env.QUEUE2));
     block.length = 0;
 }
 
