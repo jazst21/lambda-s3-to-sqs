@@ -29,6 +29,9 @@ exports.handler = function(event, context, cb) {
     var params = {
         Bucket: event.Records[0].s3.bucket.name,
         Key: event.Records[0].s3.object.key
+//        Bucket: "secondbucket.net22.live",
+//        Key: "aws-waf-logs-stream-kinesis-s3.net22(4).live-1-2022-09-15-01-01-20-c0690f71-4709-40a0-b801-f5313577ca47"
+
     };
 
     exports.blockQueue = async.queue(exports.processBlockFromQueue, process.env.CONCURRENCY);
